@@ -1,6 +1,7 @@
 <?php
 
 $ingredient = !empty($_GET['ingredient']) ? $_GET['ingredient'] : 'Tomato';
+$id = !empty($_GET['id']) ? $_GET['id'] : '52772';
 
 
 $url = 'https://www.themealdb.com/api/json/v1/1/filter.php?';
@@ -9,12 +10,6 @@ $url .= http_build_query(
         'i' => $ingredient
     ]
 );
-// $url2 = 'https://www.themealdb.com/api/json/v1/1/search.php?'
-// $url2 .= http_build_query(
-//     [
-//         's' => $name
-//     ]
-// )
 
 $curl = curl_init($url);
 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -23,14 +18,45 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 $result = curl_exec($curl);
 curl_close($curl);
-
 $result = json_decode($result);
 echo '<pre>';
 print_r($url);
 echo '</pre>';
 
+$url2 = 'https://www.themealdb.com/api/json/v1/1/lookup.php?';
+
+
+
 $rand = rand(0, 5);
-echo $rand;
+
+foreach ($result->meals as $key => $_id) 
+{
+    if ($key == $rand) {
+        echo $_id->strMeal;
+        echo $_id->idMeal;
+        $id = $_id->idMeal;
+    }
+}
+
+$url2 .= http_build_query(
+    [
+        'i' => $id
+        ]
+    );
+    
+$curl2 = curl_init($url2);
+curl_setopt($curl2, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl2, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl2, CURLOPT_SSL_VERIFYHOST, false);
+$result2 = curl_exec($curl2);
+curl_close($curl2);
+
+$result2 = json_decode($result2);
+
+echo '<pre>';
+print_r($url2);
+echo '</pre>';
 
 ?>
 
@@ -45,15 +71,11 @@ echo $rand;
 <body>
     <form action="#" method="get">
         <input type="text" name="ingredient" placeholder="Tomato" >
+        <input type="number" name="id" placeholder="0" >
         <input type="submit">
     </form>
 
     <h1>Meal with <?= $ingredient; ?></h1>
-    <?php foreach ($result->meals as $key => $_name): ?>
-        <?php if($key == $rand): ?> 
-            <div>Nom de la recette: <?= $_name->strMeal ?></div>
-        <?php endif ?>
-    <?php endforeach; ?>
   
 </body>
 </html>
