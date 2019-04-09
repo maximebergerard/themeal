@@ -4,59 +4,76 @@ $ingredient = !empty($_GET['ingredient']) ? $_GET['ingredient'] : 'Tomato';
 $id = !empty($_GET['id']) ? $_GET['id'] : '52772';
 
 
-$url = 'https://www.themealdb.com/api/json/v1/1/filter.php?';
+// $url = 'https://www.themealdb.com/api/json/v1/1/filter.php?';
+// $url2 = 'https://www.themealdb.com/api/json/v1/1/lookup.php?';
 $url .= http_build_query(
     [
         'i' => $ingredient
     ]
 );
 
-$curl = curl_init($url);
-curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-$result = curl_exec($curl);
-curl_close($curl);
-$result = json_decode($result);
-echo '<pre>';
-print_r($url);
-echo '</pre>';
+$urls = [
+    "https://www.themealdb.com/api/json/v1/1/filter.php?", 
+    "https://www.themealdb.com/api/json/v1/1/lookup.php?"
+];
 
-$url2 = 'https://www.themealdb.com/api/json/v1/1/lookup.php?';
-
-
-
-$rand = rand(0, 5);
-
-foreach ($result->meals as $key => $_id) 
+foreach ($urls as $_urls) 
 {
-    if ($key == $rand) {
-        echo $_id->strMeal;
-        echo $_id->idMeal;
-        $id = $_id->idMeal;
-    }
+    $curl = curl_init($_url)
+    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($result);
+    echo $_urls;
 }
+// $curl = curl_init($url);
+// curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+// curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+// curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+// curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+// $result = curl_exec($curl);
+// curl_close($curl);
+// $result = json_decode($result);
+// echo '<pre>';
+// print_r($url);
+// echo '</pre>';
 
-$url2 .= http_build_query(
-    [
-        'i' => $id
-        ]
-    );
+
+
+
+// $rand = rand(0, 5);
+
+// foreach ($result->meals as $key => $_id) 
+// {
+//     if ($key == $rand) {
+//         echo $_id->strMeal;
+//         echo $_id->idMeal;
+//         $id = $_id->idMeal;
+//     }
+// }
+
+// $url2 .= http_build_query(
+//     [
+//         'i' => $id
+//     ]
+//     );
     
-$curl2 = curl_init($url2);
-curl_setopt($curl2, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($curl2, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl2, CURLOPT_SSL_VERIFYHOST, false);
-$result2 = curl_exec($curl2);
-curl_close($curl2);
+// $curl2 = curl_init($url2);
+// curl_setopt($curl2, CURLOPT_FOLLOWLOCATION, true);
+// curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
+// curl_setopt($curl2, CURLOPT_SSL_VERIFYPEER, false);
+// curl_setopt($curl2, CURLOPT_SSL_VERIFYHOST, false);
+// $result2 = curl_exec($curl2);
+// curl_close($curl2);
 
-$result2 = json_decode($result2);
+// $result2 = json_decode($result2);
 
-echo '<pre>';
-print_r($url2);
-echo '</pre>';
+// echo '<pre>';
+// print_r($url2);
+// echo '</pre>';
 
 ?>
 
